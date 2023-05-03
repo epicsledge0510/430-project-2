@@ -4,32 +4,32 @@ const _ = require('underscore');
 const setName = (name) => _.escape(name).trim();
 
 const PostSchema = new mongoose.Schema({
-  //content of post
+  // content of post
   name: {
     type: String,
     required: true,
     trim: true,
     set: setName,
   },
-  //creator of post
+  // creator of post
   creator: {
     type: String,
     trim: true,
     required: true,
   },
-  //account id the post is tied to 
+  // account id the post is tied to
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
     ref: 'Account',
   },
-  //profile picture of poster
-  image:{
+  // profile picture of poster
+  image: {
     type: String,
-    default: "missing",
+    default: 'missing',
     required: true,
   },
-  //posted date of post
+  // posted date of post
   createdDate: {
     type: Date,
     default: Date.now,

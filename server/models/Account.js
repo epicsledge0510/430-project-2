@@ -22,7 +22,7 @@ let AccountModel = {};
    by bcrypt), and the created date.
 */
 const AccountSchema = new mongoose.Schema({
-  //username of the user
+  // username of the user
   username: {
     type: String,
     required: true,
@@ -30,30 +30,30 @@ const AccountSchema = new mongoose.Schema({
     unique: true,
     match: /^[A-Za-z0-9_\-.]{1,16}$/,
   },
-  //password of the user
+  // password of the user
   password: {
     type: String,
     required: true,
   },
-  //credit card number of the user
+  // credit card number of the user
   creditCardNumber: {
     type: String,
-    default: "0000000000000000",
+    default: '0000000000000000',
     required: true,
   },
-  //premium status of the user
-  isPremium:{
+  // premium status of the user
+  isPremium: {
     type: Boolean,
     default: false,
-    required: true
-  },
-  //profile picture of the user
-  pfp:{
-    type: String,
-    default: "missing",
     required: true,
   },
-  //date user was created
+  // profile picture of the user
+  pfp: {
+    type: String,
+    default: 'missing',
+    required: true,
+  },
+  // date user was created
   createdDate: {
     type: Date,
     default: Date.now,
@@ -95,18 +95,18 @@ AccountSchema.statics.authenticate = async (username, password, callback) => {
 };
 
 AccountSchema.statics.changePassword = async (req, res) => {
-  username = req.session.account.username;
-  pass = `${req.body.pass}`;
-  pass2 = `${req.body.pass2}`;
+  const { username } = req.session.account;
+  const pass = `${req.body.pass}`;
+  const pass2 = `${req.body.pass2}`;
 
   if (!username || !pass || !pass2) {
     return res.status(400).json({
-      error: 'All fields are required'
+      error: 'All fields are required',
     });
   }
   if (pass !== pass2) {
     return res.status(400).json({
-      error: 'Passwords do not match'
+      error: 'Passwords do not match',
     });
   }
   try {
@@ -118,16 +118,17 @@ AccountSchema.statics.changePassword = async (req, res) => {
     doc.password = hash;
     doc.save();
   } catch (err) {
-    return callback(err);
+    return console.log(err);
   }
+  return false;
 };
 
 AccountSchema.statics.changePremium = async (req, res) => {
-  const username = req.session.account.username;
+  const { username } = req.session.account;
   const cardNumbers = `${req.body.cardNumber}`;
   if (!cardNumbers) {
     return res.status(400).json({
-      error: 'Card details are required'
+      error: 'Card details are required',
     });
   }
   try {
@@ -140,8 +141,9 @@ AccountSchema.statics.changePremium = async (req, res) => {
     doc.isPremium = true;
     doc.save();
   } catch (err) {
-    return callback(err);
+    return console.log(err);
   }
+  return false;
 };
 
 AccountModel = mongoose.model('Account', AccountSchema);

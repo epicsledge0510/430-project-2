@@ -1,8 +1,7 @@
 const models = require('../models');
-const bcrypt = require('bcrypt');
 
 const {
-  Account
+  Account,
 } = models;
 
 const loginPage = (req, res) => res.render('login');
@@ -18,21 +17,21 @@ const login = (req, res) => {
 
   if (!username || !pass) {
     return res.status(400).json({
-      error: 'All fields are required!'
+      error: 'All fields are required!',
     });
   }
 
   return Account.authenticate(username, pass, (err, account) => {
     if (err || !account) {
       return res.status(401).json({
-        error: 'Wrong username or password!'
+        error: 'Wrong username or password!',
       });
     }
 
     req.session.account = Account.toAPI(account);
 
     return res.json({
-      redirect: '/app'
+      redirect: '/app',
     });
   });
 };
@@ -44,42 +43,41 @@ const signup = async (req, res) => {
 
   if (!username || !pass || !pass2) {
     return res.status(400).json({
-      error: 'All fields are required!'
+      error: 'All fields are required!',
     });
   }
 
   if (pass !== pass2) {
     return res.status(400).json({
-      error: 'Passwords do not match!'
+      error: 'Passwords do not match!',
     });
   }
-  const pfpImg = Math.floor(Math.random()*5);
+  const pfpImg = Math.floor(Math.random() * 5);
   try {
     const hash = await Account.generateHash(pass);
     const newAccount = new Account({
       username,
       password: hash,
       isPremium: false,
-      pfp: pfpImg
+      pfp: pfpImg,
     });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
     return res.json({
-      redirect: '/app'
+      redirect: '/app',
     });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({
-        error: 'Username already in use'
+        error: 'Username already in use',
       });
     }
     return res.status(500).json({
-      error: 'An error occured!'
+      error: 'An error occured!',
     });
   }
 };
-
 
 module.exports = {
   loginPage,

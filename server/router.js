@@ -18,7 +18,7 @@ const router = (app) => {
   app.post('/app', mid.requiresLogin, controllers.Post.makePost);
 
   app.post('/newpass', mid.requiresLogin, models.Account.changePassword);
-  app.post('/signupPremium', mid.requiresLogin,  models.Account.changePremium);
+  app.post('/signupPremium', mid.requiresLogin, models.Account.changePremium);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

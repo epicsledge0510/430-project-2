@@ -15,10 +15,13 @@ const makePost = async (req, res) => {
     owner: req.session.account._id,
   };
   try {
-    if(postData.name){}
     const newPost = new Post(postData);
     newPost.save();
-    return res.status(201).json({ name: newPost.name, creator: newPost.creator, image: newPost.image });
+    return res.status(201).json({
+      name: newPost.name,
+      creator: newPost.creator,
+      image: newPost.image,
+    });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -55,5 +58,5 @@ module.exports = {
   appPage,
   makePost,
   getPosts,
-  getMyPosts
+  getMyPosts,
 };
